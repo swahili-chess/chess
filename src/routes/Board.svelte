@@ -1,5 +1,6 @@
 <script>
     import Files from "./Files.svelte";
+	import Pieces from "./Pieces.svelte";
     import Ranks from "./Ranks.svelte";
     let ranks = Array(8).fill().map((x,i) => 8 - i)
     let files = Array(8).fill().map((x,i) => i + 1)
@@ -13,7 +14,9 @@
                {/each}
            {/each}
     </div>
+    <Pieces/>
     <Files files={files}/>
+
 </div>
 
 
