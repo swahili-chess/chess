@@ -20,7 +20,8 @@
 <style>
     .board {
         display: grid;
-        grid-template-columns: calc(.25*var(--tile-size)) calc(8*var(--tile-size))  ;
+        grid-template-columns: calc(.25*var(--tile-size)) calc(8*var(--tile-size));
+        position: relative;
 
     }
 
