@@ -1,15 +1,15 @@
 <script>
     import Files from "./Files.svelte";
     import Ranks from "./Ranks.svelte";
-    let ranks = Array(8).fill().map((x,i) => 8-i)
-    let files = Array(8).fill().map((x,i) => i)
+    let ranks = Array(8).fill().map((x,i) => 8 - i)
+    let files = Array(8).fill().map((x,i) => i + 1)
 </script>
 <div class="board">
     <Ranks ranks={ranks}/>
     <div class="tiles">
            {#each ranks as rank, i}
                {#each files as file, j}
-                 <div class="tile {(i+j) % 2 == 0 ? "tile--light" : " tile--dark" }"> </div>
+                 <div class="tile {(i+j) % 2 == 0 ? "tile--light" : " tile--dark" }"></div>
                {/each}
            {/each}
     </div>

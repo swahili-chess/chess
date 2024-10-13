@@ -5,7 +5,7 @@
 <div class="files">
 
    {#each files as file}
-    <span>{String.fromCharCode(97 + file)}</span>
+    <span>{String.fromCharCode(96 + file)}</span>
    {/each}
 
 </div>
