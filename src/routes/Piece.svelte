@@ -3,9 +3,25 @@
     export let file  
     export let piece 
 
+    function dragstart (e) {
+
+      e.dataTransfer.effectAllowed = "move"
+      e.dataTransfer.setData('text/plain',`${piece},${rank},${file}`);
+      setTimeout( () => {e.target.style.display = 'None'}, 0)
+
+    }
+
+     function dragend (e) {
+       e.target.style.display = 'block'
+   }
+
+
 </script>
 
-   <div class="piece {piece} p-{file}{rank}"></div>
+  
+
+   <!-- svelte-ignore a11y-no-static-element-interactions -->
+   <div draggable={true} on:dragstart={dragstart} on:dragend={dragend}  class="piece {piece} p-{file}{rank}"></div>
 
 
    <style>

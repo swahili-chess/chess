@@ -1,7 +1,9 @@
 <script>
 	import Piece from "./Piece.svelte";
 
-    const position =  new Array(8).fill("").map(x=>new Array(8).fill(""))
+    let ref;
+
+    let position =  new Array(8).fill("").map(x=>new Array(8).fill(""))
     for (let i = 0; i < 8; i++) {
         position[1][i] = 'wp'
         position[6][i] = 'bp'
@@ -26,11 +28,26 @@
     position[7][7] = 'br'
 
 
+    function drop (e) {
+
+        const rec = ref.getBoundingClientRect()
+        const size = rec.width / 8
+        const y = Math.floor((e.clientX - rec.left)/ size)
+        const x = 7 - Math.floor((e.clientY - rec.top) / size)
+        const [piece,rank ,file] = e.dataTransfer.getData("text/plain").split(",")
+        position[rank][file] = ""
+        position[x][y] = piece
+        position = position
+   
+    }
 
 
 </script>
 
-<div class="pieces">
+
+
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div bind:this={ref} on:drop={event => drop(event)} on:dragover={(ev) => { ev.preventDefault() }} class="pieces">
     {#each position as _, r}
         {#each position as _, f}
              {#if position[r][f]}
