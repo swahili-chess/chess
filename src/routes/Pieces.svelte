@@ -1,32 +1,10 @@
 <script>
 	import Piece from "./Piece.svelte";
+    import { store } from "../store"
 
     let pieces_ref;
 
-    let position =  new Array(8).fill("").map(x=>new Array(8).fill(""))
-    for (let i = 0; i < 8; i++) {
-        position[1][i] = 'wp'
-        position[6][i] = 'bp'
-   }    
-
-    position[0][0] = 'wr'
-    position[0][1] = 'wn'
-    position[0][2] = 'wb'
-    position[0][3] = 'wq'
-    position[0][4] = 'wk'
-    position[0][5] = 'wb'
-    position[0][6] = 'wn'
-    position[0][7] = 'wr'
-    
-    position[7][0] = 'br'
-    position[7][1] = 'bn'
-    position[7][2] = 'bb'
-    position[7][3] = 'bq'
-    position[7][4] = 'bk'
-    position[7][5] = 'bb'
-    position[7][6] = 'bn'
-    position[7][7] = 'br'
-
+    $: position = $store .positions[$store.positions.length - 1]
 
     function drop (e) {
         const rec = pieces_ref.getBoundingClientRect()
@@ -36,13 +14,14 @@
         const [piece,rank ,file] = e.dataTransfer.getData("text/plain").split(",")
         position[rank][file] = ""
         position[x][y] = piece
-        position = position
-   
+        store.update(state => {
+           const newPos = [...state.positions, position];
+           const newTurn = state.turn === 'w' ? 'b' : 'w';
+            return { ...state, positions: newPos, turn: newTurn };
+        });        
     }
 
-
 </script>
-
 
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
