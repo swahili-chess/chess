@@ -4,20 +4,18 @@
 
     let pieces_ref;
 
-    $: position = $store .positions[$store.positions.length - 1]
+    $: position = $store.positions[$store.positions.length - 1]
 
     function drop (e) {
-        const rec = pieces_ref.getBoundingClientRect()
-        const size = rec.width / 8
-        const y = Math.floor((e.clientX - rec.left)/ size)
-        const x = 7 - Math.floor((e.clientY - rec.top) / size)
+        const { left, width, top } = pieces_ref.getBoundingClientRect()
+        const size = width / 8
+        const y = Math.floor((e.clientX - left)/ size)
+        const x = 7 - Math.floor((e.clientY - top) / size)
         const [piece,rank ,file] = e.dataTransfer.getData("text/plain").split(",")
         position[rank][file] = ""
         position[x][y] = piece
         store.update(state => {
-           const newPos = [...state.positions, position];
-           const newTurn = state.turn === 'w' ? 'b' : 'w';
-            return { ...state, positions: newPos, turn: newTurn };
+            return { ...state, positions: [...state.positions, position], turn: state.turn === 'w' ? 'b' : 'w' };
         });        
     }
 
