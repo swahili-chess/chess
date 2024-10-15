@@ -1,5 +1,6 @@
 import { getKnightMoves } from "./knight";
 import { getRookMoves } from "./rook";
+import {getBishopMoves} from "./bishop"
 
 export const moves = {
     getRegularMoves : function(position, piece, rank, file) {
@@ -9,6 +10,9 @@ export const moves = {
         }
         if (piece.endsWith("r")){
             return getRookMoves(position, piece, rank, file)
+        }
+        if (piece.endsWith("b")){
+            return getBishopMoves(position, piece, rank, file)
         }
         
     }
