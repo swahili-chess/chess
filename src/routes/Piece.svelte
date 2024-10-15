@@ -3,15 +3,30 @@
     export let file  
     export let piece 
 
-    function dragstart (e) {
+     import { gameState , possibleMoves } from "../store"
 
+     import {moves} from "../moves/moves"
+
+     $: position = $gameState.positions[$gameState.positions.length - 1]
+     $: turn =  $gameState.turn
+
+     
+
+
+
+    function dragstart (e) {
       e.dataTransfer.effectAllowed = "move"
       e.dataTransfer.setData('text/plain',`${piece},${rank},${file}`);
       setTimeout( () => {e.target.style.display = 'None'}, 0)
 
+      if (turn === piece[0]){
+        const potentialMoves = moves.getRegularMoves(position, piece, rank, file)
+        possibleMoves.set(potentialMoves)
+      }
+
     }
 
-     function dragend (e) {
+    function dragend (e) {
        e.target.style.display = 'block'
    }
 
