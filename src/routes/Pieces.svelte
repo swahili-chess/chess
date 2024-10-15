@@ -1,7 +1,7 @@
 <script>
 	import Piece from "./Piece.svelte";
 
-    let ref;
+    let pieces_ref;
 
     let position =  new Array(8).fill("").map(x=>new Array(8).fill(""))
     for (let i = 0; i < 8; i++) {
@@ -29,8 +29,7 @@
 
 
     function drop (e) {
-
-        const rec = ref.getBoundingClientRect()
+        const rec = pieces_ref.getBoundingClientRect()
         const size = rec.width / 8
         const y = Math.floor((e.clientX - rec.left)/ size)
         const x = 7 - Math.floor((e.clientY - rec.top) / size)
@@ -47,7 +46,7 @@
 
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div bind:this={ref} on:drop={event => drop(event)} on:dragover={(ev) => { ev.preventDefault() }} class="pieces">
+<div bind:this={pieces_ref} on:drop={event => drop(event)} on:dragover={(ev) => { ev.preventDefault() }} class="pieces">
     {#each position as _, r}
         {#each position as _, f}
              {#if position[r][f]}
