@@ -1,21 +1,19 @@
 <script>
-    export let ranks;
+	export let ranks;
 </script>
 
 <div class="ranks">
-
-   {#each ranks as rank}
-    <span>{rank}</span>
-   {/each}
-
+	{#each ranks as rank}
+		<span>{rank}</span>
+	{/each}
 </div>
 
 <style>
-    .ranks {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        color: var(--dark-tile);
-    }
+	.ranks {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+		color: var(--dark-tile);
+	}
 </style>

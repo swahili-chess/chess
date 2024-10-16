@@ -1,20 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Sofia+Sans&display=swap');
 :root {
-    --tile-size: 100px;
-    --light-tile: #F0D8B7;
-    --dark-tile: #B48764;
-    --bg-color: #202020;
-    --highlight: rgba(0, 0, 0, .1);
-    --check: #FEEC48;
+	--tile-size: 100px;
+	--light-tile: #f0d8b7;
+	--dark-tile: #b48764;
+	--bg-color: #202020;
+	--highlight: rgba(0, 0, 0, 0.1);
+	--check: #feec48;
 }
 
-html,body {
-    margin: 0;
-    padding: 0;
+html,
+body {
+	margin: 0;
+	padding: 0;
 }
 
 @media all and (max-width: 450px) {
-    :root {
-        --tile-size: 50px;
-    }
+	:root {
+		--tile-size: 50px;
+	}
 }
