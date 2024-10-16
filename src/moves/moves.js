@@ -3,6 +3,8 @@ import { getRookMoves } from "./rook";
 import {getBishopMoves} from "./bishop"
 import {getQueenMoves} from "./queen"
 import { getKingMoves } from "./king";
+import { getPawnMoves } from "./pawn";
+import { getPawnCaptures } from "./pawn";
 
 export const moves = {
     getRegularMoves : function(position, piece, rank, file) {
@@ -23,6 +25,13 @@ export const moves = {
 
         if (piece.endsWith("k")){
             return getKingMoves(position, piece, rank, file)
+        }
+
+        if (piece.endsWith("p")){
+            return [
+                       ...getPawnMoves(position, piece, rank, file),
+                       ...getPawnCaptures(position, piece, rank, file)
+            ]
         }
         
     }
