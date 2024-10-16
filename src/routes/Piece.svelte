@@ -7,7 +7,9 @@
 
 	import { moves } from '../moves/moves';
 
-	$: position = $gameState.positions[$gameState.positions.length - 1];
+	$: positions = $gameState.positions
+	$: currentPosition = positions[positions.length - 1]
+	$: prevPosition = positions[positions.length - 2]
 	$: turn = $gameState.turn;
 
 	function dragstart(e) {
@@ -18,7 +20,15 @@
 		}, 0);
 
 		if (turn === piece[0]) {
-			const potentialMoves = moves.getRegularMoves(position, piece, rank, file);
+		console.log("curry piece", currentPosition)
+        console.log("prevyy piece", prevPosition)
+			const potentialMoves = moves.getValidMoves({
+                    position : currentPosition,
+                    prevPosition : prevPosition,
+                    piece,
+                    rank,
+                    file
+                });
 			possibleMoves.set(potentialMoves);
 		}
 	}

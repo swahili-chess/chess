@@ -5,7 +5,9 @@
 
 	let pieces_ref;
 
-	$: position = $gameState.positions[$gameState.positions.length - 1];
+
+	$: positions = $gameState.positions
+	$: current_position = positions[positions.length - 1]
 	$: mv = $possibleMoves;
 
 	function drop(e) {
@@ -16,12 +18,12 @@
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
 		if (mv?.find((m) => m[0] === x && m[1] === y)) {
-			position[rank][file] = '';
-			position[x][y] = piece;
+			current_position[rank][file] = '';
+			current_position[x][y] = piece;
 			gameState.update((state) => {
 				return {
 					...state,
-					positions: [...state.positions, position],
+					positions: [...state.positions, JSON.parse(JSON.stringify(current_position))],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});
@@ -40,10 +42,10 @@
 	}}
 	class="pieces"
 >
-	{#each position as _, r}
-		{#each position as _, f}
-			{#if position[r][f]}
-				<Piece rank={r} file={f} piece={position[r][f]} />
+	{#each current_position as _, r}
+		{#each current_position as _, f}
+			{#if current_position[r][f]}
+				<Piece rank={r} file={f} piece={current_position[r][f]} />
 			{:else}
 				{''}
 			{/if}

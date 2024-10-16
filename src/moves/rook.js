@@ -1,4 +1,4 @@
-export const getRookMoves = (position, piece, rank, file) => {
+export const getRookMoves = ({position, piece, rank, file}) => {
 	const moves = [];
 	const me = piece[0];
 	const enemy = me === 'w' ? 'b' : 'w';

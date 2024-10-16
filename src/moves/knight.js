@@ -1,4 +1,4 @@
-export const getKnightMoves = (position, piece, rank, file) => {
+export const getKnightMoves = ({position, piece, rank, file}) => {
 	const moves = [];
 	const enemy = piece[0] === 'w' ? 'b' : 'w';
 	const direction = [
