@@ -14,10 +14,10 @@ export const getPawnMoves = ({position, piece, rank, file}) => {
 };
 
 
-export const getPawnCaptures =  ({position,prevPosition,piece,rank,file}) => {
+export const getPawnCaptures =  ({position, prevPosition, piece, rank, file}) => {
 
     const moves = []
-    const dir = piece==='wp' ? 1 : -1
+    const dir = piece === 'wp' ? 1 : -1
     const enemy = piece[0] === 'w' ? 'b' : 'w'
 
     // Capture enemy to left
@@ -27,7 +27,7 @@ export const getPawnCaptures =  ({position,prevPosition,piece,rank,file}) => {
 
     // Capture enemy to right
     if (position?.[rank+dir]?.[file+1] && position[rank+dir][file+1].startsWith(enemy) ){
-        moves.push ([rank+dir,file+1])
+        moves.push([rank+dir,file+1])
     }
 
     // EnPassant
@@ -37,9 +37,8 @@ export const getPawnCaptures =  ({position,prevPosition,piece,rank,file}) => {
     if(prevPosition){
         console.log("check for enpassant")
         if ((dir === 1 && rank === 4) || (dir === -1 && rank === 3)){
-            console.log("passed 1st")
+            console.log("passed 1st", rank, file , dir )
             adjacentFiles.forEach(f => {
-                console.log("form rank file",f, rank, file)
                 console.log("1st", position?.[rank]?.[f] , [rank, f])
                 console.log("2nd", position?.[rank+dir+dir]?.[f], [rank+dir+dir,f])
                 console.log("3rd", prevPosition?.[rank]?.[f], [rank, f])

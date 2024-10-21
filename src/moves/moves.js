@@ -31,10 +31,10 @@ export const moves = {
 		}
 	},
 
-    getValidMoves : function ({position,prevPosition,piece,rank,file}) {
+    getValidMoves : function ({position, prevPosition ,piece ,rank,file}) {
 
-       console.log("curry", position)
-        console.log("prevyy", prevPosition)
+		console.log("cp", position)
+		console.log("pv", prevPosition)
 
         let moves = this.getRegularMoves({position,piece,rank,file})
         if (piece.endsWith('p')){

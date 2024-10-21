@@ -2,8 +2,8 @@
 	import Files from './Files.svelte';
 	import Pieces from './Pieces.svelte';
 	import Ranks from './Ranks.svelte';
-	import { possibleMoves } from '../store';
-	import { gameState } from '../store';
+	import { possibleMoves } from '../store/movestore';
+	import { gameState } from '../store/gamestore';
 	import '../styles.css';
 
 	let ranks = Array(8)
@@ -13,14 +13,11 @@
 		.fill()
 		.map((x, i) => i + 1);
 
-	$: mv = $possibleMoves;
-	$: position = $gameState.positions[$gameState.positions.length - 1];
-
 	const getClassName = (mv, i, j) => {
 		let c = 'tile';
 		c += (i + j) % 2 === 0 ? ' tile--dark' : ' tile--light';
-		if (mv?.find((m) => m[0] === i && m[1] === j)) {
-			if (position[i][j]) c += ' attacking';
+		if ($possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
+			if ($gameState.positions[$gameState.positions.length - 1][i][j]) c += ' attacking';
 			else c += ' highlight';
 		}
 
@@ -31,9 +28,9 @@
 <div class="board">
 	<Ranks {ranks} />
 	<div class="tiles">
-		{#each ranks as rank, i}
-			{#each files as file, j}
-				<div class={getClassName(mv, 7 - i, j)}></div>
+		{#each ranks as _, i}
+			{#each files as _, j}
+				<div class={getClassName($possibleMoves, 7 - i, j)}></div>
 			{/each}
 		{/each}
 	</div>

@@ -1,13 +1,10 @@
 <script>
 	import Piece from './Piece.svelte';
-	import { gameState } from '../store';
-	import { possibleMoves } from '../store';
+	import { gameState } from '../store/gamestore';
+	import { possibleMoves } from '../store/movestore';
 
 	let pieces_ref;
-
-
-	$: positions = $gameState.positions
-	$: current_position = positions[positions.length - 1]
+	$: current_position = $gameState.positions[$gameState.positions.length - 1]
 	$: mv = $possibleMoves;
 
 	function drop(e) {
@@ -17,13 +14,15 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
+		console.log("ssrf",rank, file )
+		console.log("ssxy", x, y )
 		if (mv?.find((m) => m[0] === x && m[1] === y)) {
 			current_position[rank][file] = '';
 			current_position[x][y] = piece;
 			gameState.update((state) => {
 				return {
 					...state,
-					positions: [...state.positions, JSON.parse(JSON.stringify(current_position))],
+					positions: [...state.positions, current_position.map(row => [...row])],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});

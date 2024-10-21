@@ -3,14 +3,10 @@
 	export let file;
 	export let piece;
 
-	import { gameState, possibleMoves } from '../store';
+	import { gameState } from '../store/gamestore';
+	import { possibleMoves } from '../store/movestore';
+	import { moves } from '../moves/moves'
 
-	import { moves } from '../moves/moves';
-
-	$: positions = $gameState.positions
-	$: currentPosition = positions[positions.length - 1]
-	$: prevPosition = positions[positions.length - 2]
-	$: turn = $gameState.turn;
 
 	function dragstart(e) {
 		e.dataTransfer.effectAllowed = 'move';
@@ -19,15 +15,14 @@
 			e.target.style.display = 'None';
 		}, 0);
 
-		if (turn === piece[0]) {
-		console.log("curry piece", currentPosition)
-        console.log("prevyy piece", prevPosition)
+		if ($gameState.turn === piece[0]) {
+		  console.log("store", $gameState.positions)
 			const potentialMoves = moves.getValidMoves({
-                    position : currentPosition,
-                    prevPosition : prevPosition,
-                    piece,
-                    rank,
-                    file
+                    position : $gameState.positions[$gameState.positions.length - 1],
+                    prevPosition : $gameState.positions[$gameState.positions.length - 2],
+                    piece : piece ,
+                    rank :  rank, 
+                    file : file,
                 });
 			possibleMoves.set(potentialMoves);
 		}

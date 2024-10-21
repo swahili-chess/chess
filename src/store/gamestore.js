@@ -31,4 +31,4 @@ const initialState = {
 
 export const gameState = writable(initialState);
 
-export const possibleMoves = writable([]);
+
