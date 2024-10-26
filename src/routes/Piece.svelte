@@ -1,11 +1,9 @@
 <script>
-	export let rank;
-	export let file;
-	export let piece;
 
 	import { gameState } from '../store/gamestore';
 	import { possibleMoves } from '../store/movestore';
 	import { moves } from '../moves/moves'
+	let { rank, file, piece } = $props();
 
 
 	function dragstart(e) {
@@ -33,11 +31,11 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	draggable={true}
-	on:dragstart={dragstart}
-	on:dragend={dragend}
+	ondragstart={dragstart}
+	ondragend={dragend}
 	class="piece {piece} p-{file}{rank}"
 ></div>
 

@@ -1,5 +1,5 @@
 <script>
-	export let ranks;
+	let { ranks } = $props();
 </script>
 
 <div class="ranks">

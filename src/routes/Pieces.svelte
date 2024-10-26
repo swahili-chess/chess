@@ -3,10 +3,10 @@
 	import { gameState } from '../store/gamestore';
 	import { possibleMoves } from '../store/movestore';
 
-	let pieces_ref;
-	$: current_position = $gameState.positions[$gameState.positions.length - 1]
-	$: hack_position = $gameState.positions[$gameState.positions.length - 2]
-	$: mv = $possibleMoves;
+	let pieces_ref = $state();
+	let current_position = $derived($gameState.positions[$gameState.positions.length - 1])
+	let hack_position = $derived($gameState.positions[$gameState.positions.length - 2])
+	let mv = $derived($possibleMoves);
 
 	function drop(e) {
 		const { left, width, top } = pieces_ref.getBoundingClientRect();
@@ -33,11 +33,11 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	bind:this={pieces_ref}
-	on:drop={(event) => drop(event)}
-	on:dragover={(ev) => {
+	ondrop={(event) => drop(event)}
+	ondragover={(ev) => {
 		ev.preventDefault();
 	}}
 	class="pieces"
