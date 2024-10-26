@@ -5,6 +5,7 @@
 
 	let pieces_ref;
 	$: current_position = $gameState.positions[$gameState.positions.length - 1]
+	$: hack_position = $gameState.positions[$gameState.positions.length - 2]
 	$: mv = $possibleMoves;
 
 	function drop(e) {
