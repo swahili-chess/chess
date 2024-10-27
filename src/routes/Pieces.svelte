@@ -5,7 +5,6 @@
 
 	let pieces_ref;
 	$: current_position = $gameState.positions[$gameState.positions.length - 1]
-	$: hack_position = $gameState.positions[$gameState.positions.length - 2]
 	$: mv = $possibleMoves;
 
 	function drop(e) {
@@ -15,10 +14,15 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
-		console.log("ssrf",rank, file )
-		console.log("ssxy", x, y )
+
 		if (mv?.find((m) => m[0] === x && m[1] === y)) {
+
 			let c = current_position.map(row => [...row])
+			//en passant
+			if (piece.endsWith("p") && c[x][y] === "" && x != rank && y != file ){
+                c[rank][y] = ""
+			}
+
 			c[rank][file] = '';
 			c[x][y] = piece;
 			gameState.update((state) => {
