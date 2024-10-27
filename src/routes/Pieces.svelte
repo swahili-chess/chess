@@ -18,12 +18,13 @@
 		console.log("ssrf",rank, file )
 		console.log("ssxy", x, y )
 		if (mv?.find((m) => m[0] === x && m[1] === y)) {
-			current_position[rank][file] = '';
-			current_position[x][y] = piece;
+			let c = current_position.map(row => [...row])
+			c[rank][file] = '';
+			c[x][y] = piece;
 			gameState.update((state) => {
 				return {
 					...state,
-					positions: [...state.positions, current_position.map(row => [...row])],
+					positions: [...state.positions, c],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});
