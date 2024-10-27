@@ -1,4 +1,4 @@
-export const getRookMoves = ({position, piece, rank, file}) => {
+export const getRookMoves = ({ currentPosition, piece, rank, file }) => {
 	const moves = [];
 	const me = piece[0];
 	const enemy = me === 'w' ? 'b' : 'w';
@@ -13,16 +13,16 @@ export const getRookMoves = ({position, piece, rank, file}) => {
 			const x = rank + i * dir[0];
 			const y = file + i * dir[1];
 
-			if (position?.[x]?.[y] === undefined) {
+			if (currentPosition?.[x]?.[y] === undefined) {
 				break;
 			}
 
-			if (position[x][y].startsWith(enemy)) {
+			if (currentPosition[x][y].startsWith(enemy)) {
 				moves.push([x, y]);
 				break;
 			}
 
-			if (position[x][y].startsWith(me)) {
+			if (currentPosition[x][y].startsWith(me)) {
 				break;
 			}
 

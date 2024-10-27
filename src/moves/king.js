@@ -1,4 +1,4 @@
-export const getKingMoves = ({position, piece, rank, file}) => {
+export const getKingMoves = ({ currentPosition, piece, rank, file }) => {
 	const moves = [];
 	const me = piece[0];
 	const direction = [
@@ -13,7 +13,7 @@ export const getKingMoves = ({position, piece, rank, file}) => {
 	];
 
 	direction.forEach((m) => {
-		const p = position?.[rank + m[0]]?.[file + m[1]];
+		const p = currentPosition?.[rank + m[0]]?.[file + m[1]];
 		if (p !== undefined && !p.startsWith(me)) {
 			moves.push([rank + m[0], file + m[1]]);
 		}

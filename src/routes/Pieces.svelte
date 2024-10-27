@@ -1,11 +1,11 @@
 <script>
 	import Piece from './Piece.svelte';
-	import { gameState } from '../store/gamestore';
-	import { possibleMoves } from '../store/movestore';
+	import { game } from '../store/store';
+	import { possibleMoves } from '../store/store';
 
 	let pieces_ref;
-	$: current_position = $gameState.positions[$gameState.positions.length - 1]
-	$: mv = $possibleMoves;
+	$: currentPosition = $game.positions[$game.positions.length - 1];
+	$: pm = $possibleMoves;
 
 	function drop(e) {
 		const { left, width, top } = pieces_ref.getBoundingClientRect();
@@ -14,21 +14,20 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
-
-		if (mv?.find((m) => m[0] === x && m[1] === y)) {
-
-			let c = current_position.map(row => [...row])
+		if (pm?.find((m) => m[0] === x && m[1] === y)) {
+			let cp = currentPosition.map((row) => [...row]);
 			//en passant
-			if (piece.endsWith("p") && c[x][y] === "" && x != rank && y != file ){
-                c[rank][y] = ""
+			if (piece.endsWith('p') && cp[x][y] === '' && x != rank && y != file) {
+				cp[rank][y] = '';
 			}
 
-			c[rank][file] = '';
-			c[x][y] = piece;
-			gameState.update((state) => {
+			cp[rank][file] = '';
+			cp[x][y] = piece;
+
+			game.update((state) => {
 				return {
 					...state,
-					positions: [...state.positions, c],
+					positions: [...state.positions, cp],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});
@@ -47,10 +46,10 @@
 	}}
 	class="pieces"
 >
-	{#each current_position as _, r}
-		{#each current_position as _, f}
-			{#if current_position[r][f]}
-				<Piece rank={r} file={f} piece={current_position[r][f]} />
+	{#each currentPosition as _, r}
+		{#each currentPosition as _, f}
+			{#if currentPosition[r][f]}
+				<Piece rank={r} file={f} piece={currentPosition[r][f]} />
 			{:else}
 				{''}
 			{/if}

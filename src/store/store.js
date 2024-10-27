@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
 let initPos = new Array(8).fill('').map(() => new Array(8).fill(''));
+
 for (let i = 0; i < 8; i++) {
 	initPos[1][i] = 'wp';
 	initPos[6][i] = 'bp';
@@ -29,6 +30,6 @@ const initialState = {
 	turn: 'w'
 };
 
-export const gameState = writable(initialState);
+export const game = writable(initialState);
 
-
+export const possibleMoves = writable([]);

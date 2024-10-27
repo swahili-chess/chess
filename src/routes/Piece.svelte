@@ -3,10 +3,9 @@
 	export let file;
 	export let piece;
 
-	import { gameState } from '../store/gamestore';
-	import { possibleMoves } from '../store/movestore';
-	import { moves } from '../moves/moves'
-
+	import { game } from '../store/store';
+	import { possibleMoves } from '../store/store';
+	import { moves } from '../moves/moves';
 
 	function dragstart(e) {
 		e.dataTransfer.effectAllowed = 'move';
@@ -15,15 +14,14 @@
 			e.target.style.display = 'None';
 		}, 0);
 
-		if ($gameState.turn === piece[0]) {
-		  console.log("store", $gameState.positions)
+		if ($game.turn === piece[0]) {
 			const potentialMoves = moves.getValidMoves({
-                    position : $gameState.positions[$gameState.positions.length - 1],
-                    prevPosition : $gameState.positions[$gameState.positions.length - 2],
-                    piece : piece ,
-                    rank :  rank, 
-                    file : file,
-                });
+				currentPosition: $game.positions[$game.positions.length - 1],
+				previousPosition: $game.positions[$game.positions.length - 2],
+				piece: piece,
+				rank: rank,
+				file: file
+			});
 			possibleMoves.set(potentialMoves);
 		}
 	}
