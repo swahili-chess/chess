@@ -15,11 +15,27 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
+<<<<<<< HEAD
 		// console.log("ssrf",rank, file )
 		// console.log("ssxy", x, y )
 
 		if ( x === Number(rank) && y === Number(file)){
 			return;
+=======
+		console.log("ssrf",rank, file )
+		console.log("ssxy", x, y )
+		if (mv?.find((m) => m[0] === x && m[1] === y)) {
+			let c = current_position.map(row => [...row])
+			c[rank][file] = '';
+			c[x][y] = piece;
+			gameState.update((state) => {
+				return {
+					...state,
+					positions: [...state.positions, c],
+					turn: state.turn === 'w' ? 'b' : 'w'
+				};
+			});
+>>>>>>> 973851a8e3b3c3a4b54346e454f931fa82e5fe36
 		}
 
 		if (possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
