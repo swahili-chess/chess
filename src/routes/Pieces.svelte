@@ -1,12 +1,12 @@
 <script>
 	import Piece from './Piece.svelte';
-	import { gameState } from '../store/gamestore';
-	import { possibleMoves } from '../store/movestore';
+	import { gameState } from '../state/game.svelte.js';
+	import { possibleMoves } from '../state/move.svelte.js';
 
 	let pieces_ref = $state();
-	let current_position = $derived($gameState.positions[$gameState.positions.length - 1])
-	let hack_position = $derived($gameState.positions[$gameState.positions.length - 2])
-	let mv = $derived($possibleMoves);
+	let cp = $derived(gameState.positions[gameState.positions.length - 1])
+	let currentPosition = gameState.positions[gameState.positions.length - 1]
+	
 
 	function drop(e) {
 		const { left, width, top } = pieces_ref.getBoundingClientRect();
@@ -15,21 +15,36 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
-		console.log("ssrf",rank, file )
-		console.log("ssxy", x, y )
-		if (mv?.find((m) => m[0] === x && m[1] === y)) {
-			current_position[rank][file] = '';
-			current_position[x][y] = piece;
-			gameState.update((state) => {
-				return {
-					...state,
-					positions: [...state.positions, current_position.map(row => [...row])],
-					turn: state.turn === 'w' ? 'b' : 'w'
-				};
-			});
+		// console.log("ssrf",rank, file )
+		// console.log("ssxy", x, y )
+
+		if ( x === Number(rank) && y === Number(file)){
+			return;
 		}
 
-		possibleMoves.set([]);
+		if (possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
+			console.log("before")
+			console.log( "turn", $state.snapshot(gameState.turn))
+			console.log("ss" , $state.snapshot(gameState.positions))
+
+			let c = currentPosition.map(subArray => [...subArray]);
+
+			c[rank][file] = '';
+			c[x][y] = piece;
+
+
+			gameState.positions.push(c)
+			gameState.turn = gameState.turn === 'w' ? 'b' : 'w'
+
+			console.log( "turn", $state.snapshot(gameState.turn))
+			console.log("ss" , $state.snapshot(gameState.positions))
+
+			console.log("after")
+			console.log( "turn", $state.snapshot(gameState.turn))
+			console.log("ss" , $state.snapshot(gameState.positions))
+		}
+
+		possibleMoves.splice(0, possibleMoves.length);
 	}
 </script>
 
@@ -42,10 +57,10 @@
 	}}
 	class="pieces"
 >
-	{#each current_position as _, r}
-		{#each current_position as _, f}
-			{#if current_position[r][f]}
-				<Piece rank={r} file={f} piece={current_position[r][f]} />
+	{#each cp as _, r}
+		{#each cp as _, f}
+			{#if cp[r][f]}
+				<Piece rank={r} file={f} piece={cp[r][f]} />
 			{:else}
 				{''}
 			{/if}

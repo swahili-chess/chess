@@ -1,28 +1,37 @@
 <script>
 
-	import { gameState } from '../store/gamestore';
-	import { possibleMoves } from '../store/movestore';
+	import { gameState } from '../state/game.svelte';
+	import { possibleMoves } from '../state/move.svelte.js';
 	import { moves } from '../moves/moves'
 	let { rank, file, piece } = $props();
+	let currentPosition = gameState.positions[gameState.positions.length - 1]
+	let previousPosition = gameState.positions[gameState.positions.length - 2]
 
 
 	function dragstart(e) {
+
+		// console.log("drag has started")
+		// console.log("cp", currentPosition)
+		// console.log("pv",previousPosition)
+
 		e.dataTransfer.effectAllowed = 'move';
 		e.dataTransfer.setData('text/plain', `${piece},${rank},${file}`);
 		setTimeout(() => {
 			e.target.style.display = 'None';
 		}, 0);
 
-		if ($gameState.turn === piece[0]) {
-		  console.log("store", $gameState.positions)
+		if (gameState.turn === piece[0]) {
 			const potentialMoves = moves.getValidMoves({
-                    position : $gameState.positions[$gameState.positions.length - 1],
-                    prevPosition : $gameState.positions[$gameState.positions.length - 2],
+                    position : currentPosition,
+                    prevPosition : previousPosition,
                     piece : piece ,
                     rank :  rank, 
                     file : file,
                 });
-			possibleMoves.set(potentialMoves);
+
+				
+			possibleMoves.push(...potentialMoves);
+			
 		}
 	}
 

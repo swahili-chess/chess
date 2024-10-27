@@ -33,14 +33,16 @@ export const moves = {
 
     getValidMoves : function ({position, prevPosition ,piece ,rank,file}) {
 
-		console.log("cp", position)
-		console.log("pv", prevPosition)
+		// console.log("GETTING VALID MOVES ON postn")
 
-        let moves = this.getRegularMoves({position,piece,rank,file})
+		// console.log("cp", position)
+		// console.log("pv", prevPosition)
+
+        let moves = this.getRegularMoves({ position, piece, rank, file})
         if (piece.endsWith('p')){
             moves = [
                 ...moves,
-                ...getPawnCaptures({position,prevPosition,piece,rank,file})
+                ...getPawnCaptures({position, prevPosition, piece, rank, file})
             ]
         }
 
