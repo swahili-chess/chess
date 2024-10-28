@@ -2,6 +2,7 @@
 	import Piece from './Piece.svelte';
 	import { game } from '../store/store';
 	import { possibleMoves } from '../store/store';
+	import { moves } from '../moves/moves';
 
 	let pieces_ref;
 	$: currentPosition = $game.positions[$game.positions.length - 1];
@@ -15,19 +16,18 @@
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
 		if (pm?.find((m) => m[0] === x && m[1] === y)) {
-			let cp = currentPosition.map((row) => [...row]);
-			//en passant
-			if (piece.endsWith('p') && cp[x][y] === '' && x != rank && y != file) {
-				cp[rank][y] = '';
-			}
-
-			cp[rank][file] = '';
-			cp[x][y] = piece;
-
+			const newPosition = moves.performMove({
+				currentPosition: currentPosition,
+				piece: piece,
+				rank: rank,
+				file: file,
+				x: x,
+				y:y,
+			});
 			game.update((state) => {
 				return {
 					...state,
-					positions: [...state.positions, cp],
+					positions: [...state.positions, newPosition],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});

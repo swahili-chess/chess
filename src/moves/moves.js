@@ -5,6 +5,8 @@ import { getQueenMoves } from './queen';
 import { getKingMoves } from './king';
 import { getPawnMoves } from './pawn';
 import { getPawnCaptures } from './pawn';
+import { movePawn } from './move';
+import { movePiece } from './move';
 
 export const moves = {
 	getRegularMoves: function ({ currentPosition, piece, rank, file }) {
@@ -41,5 +43,12 @@ export const moves = {
 		}
 
 		return moves;
-	}
+	},
+
+	performMove : function ({currentPosition,piece,rank,file,x,y}) {
+        if (piece.endsWith('p'))
+            return movePawn({currentPosition,piece,rank,file,x,y})
+        else 
+            return movePiece({currentPosition,piece,rank,file,x,y})
+    },
 };
