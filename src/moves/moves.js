@@ -45,10 +45,8 @@ export const moves = {
 		return moves;
 	},
 
-	performMove : function ({currentPosition,piece,rank,file,x,y}) {
-        if (piece.endsWith('p'))
-            return movePawn({currentPosition,piece,rank,file,x,y})
-        else 
-            return movePiece({currentPosition,piece,rank,file,x,y})
-    },
+	performMove: function ({ currentPosition, piece, rank, file, x, y }) {
+		if (piece.endsWith('p')) return movePawn({ currentPosition, piece, rank, file, x, y });
+		else return movePiece({ currentPosition, piece, rank, file, x, y });
+	}
 };
