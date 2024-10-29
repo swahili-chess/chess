@@ -1,7 +1,7 @@
 <script>
 	import Piece from './Piece.svelte';
 	import { game } from '../store/store';
-	import { possibleMoves } from '../store/store';
+	import { possibleMoves, status, statuses } from '../store/store';
 	import { moves } from '../moves/moves';
 
 	let pieces_ref;
@@ -16,13 +16,28 @@
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
 		if (pm?.find((m) => m[0] === x && m[1] === y)) {
+			if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
+				status.update((state) => {
+					return {
+						...state,
+						status: statuses.promoting,
+						promotionValues: {
+							rank: Number(rank),
+							file: Number(file),
+							x: x,
+							y: y
+						}
+					};
+				});
+				return;
+			}
 			const newPosition = moves.performMove({
 				currentPosition: currentPosition,
 				piece: piece,
-				rank: rank,
-				file: file,
+				rank: Number(rank),
+				file: Number(file),
 				x: x,
-				y:y,
+				y: y
 			});
 			game.update((state) => {
 				return {

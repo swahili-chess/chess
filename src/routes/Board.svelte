@@ -5,6 +5,7 @@
 	import { possibleMoves } from '../store/store';
 	import { game } from '../store/store';
 	import '../styles.css';
+	import Popup from './Popup.svelte';
 
 	let ranks = Array(8)
 		.fill()
@@ -35,6 +36,7 @@
 		{/each}
 	</div>
 	<Pieces />
+	<Popup />
 	<Files {files} />
 </div>
 

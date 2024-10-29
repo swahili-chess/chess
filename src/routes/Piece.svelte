@@ -38,4 +38,3 @@
 	on:dragend={dragend}
 	class="piece {piece} p-{file}{rank}"
 ></div>
-

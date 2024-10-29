@@ -25,6 +25,15 @@ initPos[7][5] = 'bb';
 initPos[7][6] = 'bn';
 initPos[7][7] = 'br';
 
+export const statuses = {
+	ongoing: 'Ongoing',
+	promoting: 'Promoting',
+	white: 'White wins',
+	black: 'Black wins',
+	stalemate: 'Game draws due to stalemate',
+	insufficient: 'Game draws due to insufficient material'
+};
+
 const initialState = {
 	positions: [initPos],
 	turn: 'w'
@@ -33,3 +42,15 @@ const initialState = {
 export const game = writable(initialState);
 
 export const possibleMoves = writable([]);
+
+const initialStatus = {
+	status: '',
+	promotionValues: {
+		rank: 0,
+		file: 0,
+		x: 0,
+		y: 0
+	}
+};
+
+export const status = writable(initialStatus);
