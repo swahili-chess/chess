@@ -1,11 +1,9 @@
 <script>
+	import { game, status, possibleMoves } from '../store/store';
+	import { moves } from '../moves/moves';
 	export let rank;
 	export let file;
 	export let piece;
-
-	import { game } from '../store/store';
-	import { possibleMoves } from '../store/store';
-	import { moves } from '../moves/moves';
 
 	function dragstart(e) {
 		e.dataTransfer.effectAllowed = 'move';
@@ -18,6 +16,7 @@
 			const potentialMoves = moves.getValidMoves({
 				currentPosition: $game.positions[$game.positions.length - 1],
 				previousPosition: $game.positions[$game.positions.length - 2],
+				castleDirection: $status.castleDirection[$game.turn],
 				piece: piece,
 				rank: rank,
 				file: file

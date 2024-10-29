@@ -50,6 +50,10 @@ const initialStatus = {
 		file: 0,
 		x: 0,
 		y: 0
+	},
+	castleDirection: {
+		w: 'both',
+		b: 'both'
 	}
 };
 

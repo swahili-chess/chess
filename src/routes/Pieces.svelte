@@ -3,11 +3,30 @@
 	import { game } from '../store/store';
 	import { possibleMoves, status, statuses } from '../store/store';
 	import { moves } from '../moves/moves';
+	import { getCastlingDirections } from '../moves/castle';
 
 	let pieces_ref;
 	$: currentPosition = $game.positions[$game.positions.length - 1];
-	$: pm = $possibleMoves;
 
+	const updateCastlingState = ({ piece, file, rank }) => {
+		const direction = getCastlingDirections({
+			castleDirection: $status.castleDirection,
+			piece,
+			file,
+			rank
+		});
+		if (direction) {
+			status.update((s) => {
+				return {
+					...s,
+					castleDirection: {
+						...s.castleDirection,
+						[piece[0]]: direction
+					}
+				};
+			});
+		}
+	};
 	function drop(e) {
 		const { left, width, top } = pieces_ref.getBoundingClientRect();
 		const size = width / 8;
@@ -15,7 +34,7 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 
-		if (pm?.find((m) => m[0] === x && m[1] === y)) {
+		if ($possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
 			if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
 				status.update((state) => {
 					return {
@@ -31,6 +50,11 @@
 				});
 				return;
 			}
+
+			if (piece.endsWith('r') || piece.endsWith('k')) {
+				updateCastlingState({ piece, file, rank });
+			}
+
 			const newPosition = moves.performMove({
 				currentPosition: currentPosition,
 				piece: piece,

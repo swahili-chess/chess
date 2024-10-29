@@ -5,6 +5,7 @@ import { getQueenMoves } from './queen';
 import { getKingMoves } from './king';
 import { getPawnMoves } from './pawn';
 import { getPawnCaptures } from './pawn';
+import { getCastlingMoves } from './castle';
 import { movePawn } from './move';
 import { movePiece } from './move';
 
@@ -33,7 +34,14 @@ export const moves = {
 		}
 	},
 
-	getValidMoves: function ({ currentPosition, previousPosition, piece, rank, file }) {
+	getValidMoves: function ({
+		currentPosition,
+		previousPosition,
+		castleDirection,
+		piece,
+		rank,
+		file
+	}) {
 		let moves = this.getRegularMoves({ currentPosition, piece, rank, file });
 		if (piece.endsWith('p')) {
 			moves = [
@@ -41,6 +49,12 @@ export const moves = {
 				...getPawnCaptures({ currentPosition, previousPosition, piece, rank, file })
 			];
 		}
+
+		if (piece.endsWith('k'))
+			moves = [
+				...moves,
+				...getCastlingMoves({ currentPosition, castleDirection, piece, rank, file })
+			];
 
 		return moves;
 	},
