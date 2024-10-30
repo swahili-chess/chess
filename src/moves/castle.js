@@ -1,51 +1,102 @@
+import { moves } from './moves';
+
 export const getCastlingMoves = ({ currentPosition, castleDirection, piece, rank, file }) => {
-	const moves = [];
+	const mv = [];
 
 	if (file !== 4 || rank % 7 !== 0 || castleDirection === 'none') {
-		return moves;
+		return mv;
 	}
 	if (piece.startsWith('w')) {
+		if (
+			moves.isPlayerInCheck({
+				positionAfterMove: currentPosition,
+				player: 'w'
+			})
+		)
+			return mv;
+
 		if (
 			['left', 'both'].includes(castleDirection) &&
 			!currentPosition[0][3] &&
 			!currentPosition[0][2] &&
 			!currentPosition[0][1] &&
-			currentPosition[0][0] === 'wr'
+			currentPosition[0][0] === 'wr' &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 0, y: 3 }),
+				player: 'w'
+			}) &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 0, y: 2 }),
+				player: 'w'
+			})
 		) {
-			moves.push([0, 2]);
+			mv.push([0, 2]);
 		}
-
 		if (
 			['right', 'both'].includes(castleDirection) &&
 			!currentPosition[0][5] &&
 			!currentPosition[0][6] &&
-			currentPosition[0][7] === 'wr'
+			currentPosition[0][7] === 'wr' &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 0, y: 5 }),
+				player: 'w'
+			}) &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 0, y: 6 }),
+				player: 'w'
+			})
 		) {
-			moves.push([0, 6]);
+			mv.push([0, 6]);
 		}
-
-		return moves;
 	} else {
+		if (
+			moves.isPlayerInCheck({
+				positionAfterMove: currentPosition,
+				player: 'b'
+			})
+		)
+			return mv;
+
 		if (
 			['left', 'both'].includes(castleDirection) &&
 			!currentPosition[7][3] &&
 			!currentPosition[7][2] &&
 			!currentPosition[7][1] &&
-			currentPosition[7][0] === 'br'
+			currentPosition[7][0] === 'br' &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 7, y: 3 }),
+				currentPosition: currentPosition,
+				player: 'b'
+			}) &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 7, y: 2 }),
+				position: currentPosition,
+				player: 'b'
+			})
 		) {
-			moves.push([7, 2]);
+			mv.push([7, 2]);
 		}
 		if (
 			['right', 'both'].includes(castleDirection) &&
 			!currentPosition[7][5] &&
 			!currentPosition[7][6] &&
-			currentPosition[7][7] === 'br'
+			currentPosition[7][7] === 'br' &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 7, y: 5 }),
+				currentPosition: currentPosition,
+				player: 'b'
+			}) &&
+			!moves.isPlayerInCheck({
+				positionAfterMove: moves.performMove({ currentPosition, piece, rank, file, x: 7, y: 6 }),
+				currentPosition: currentPosition,
+				player: 'b'
+			})
 		) {
-			moves.push([7, 6]);
+			mv.push([7, 6]);
 		}
-
-		return moves;
 	}
+
+	return mv;
 };
 
 export const getCastlingDirections = ({ castleDirection, piece, file, rank }) => {

@@ -21,3 +21,14 @@ export const getKingMoves = ({ currentPosition, piece, rank, file }) => {
 
 	return moves;
 };
+
+export const getKingPosition = (currentPosition, player) => {
+	let kingPos;
+	currentPosition.forEach((rank, x) => {
+		rank.forEach((file, y) => {
+			if (currentPosition[x][y].startsWith(player) && currentPosition[x][y].endsWith('k'))
+				kingPos = [x, y];
+		});
+	});
+	return kingPos;
+};

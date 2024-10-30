@@ -6,6 +6,7 @@
 	import { game } from '../store/store';
 	import '../styles.css';
 	import Popup from './Popup.svelte';
+	import { moves } from '../moves/moves';
 
 	let ranks = Array(8)
 		.fill()
@@ -14,12 +15,29 @@
 		.fill()
 		.map((x, i) => i + 1);
 
-	const getClassName = (mv, i, j) => {
+	const checkTile = (() => {
+		const isInCheck = moves.isPlayerInCheck({
+			positionAfterMove: $game.positions[$game.positions.length - 1],
+			player: $game.turn
+		});
+
+		console.log('pd', isInCheck);
+
+		if (isInCheck) return getKingPosition(position, $game.turn);
+
+		return null;
+	})();
+
+	const getClassName = (i, j) => {
 		let c = 'tile';
 		c += (i + j) % 2 === 0 ? ' tile--dark' : ' tile--light';
 		if ($possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
 			if ($game.positions[$game.positions.length - 1][i][j]) c += ' attacking';
 			else c += ' highlight';
+		}
+
+		if (checkTile && checkTile[0] === i && checkTile[1] === j) {
+			c += ' checked';
 		}
 
 		return c;
@@ -31,7 +49,7 @@
 	<div class="tiles">
 		{#each ranks as _, i}
 			{#each files as _, j}
-				<div class={getClassName($possibleMoves, 7 - i, j)}></div>
+				<div class={getClassName(7 - i, j)}></div>
 			{/each}
 		{/each}
 	</div>
@@ -85,6 +103,18 @@
 		width: calc(var(--tile-size) - 12px);
 		height: calc(var(--tile-size) - 12px);
 		border-radius: 50%;
+		left: 0;
+		top: 0;
+	}
+
+	.checked:after {
+		display: block;
+		position: absolute;
+		content: '';
+		width: var(--tile-size);
+		height: var(--tile-size);
+		background: var(--check);
+		border-radius: 20px;
 		left: 0;
 		top: 0;
 	}
