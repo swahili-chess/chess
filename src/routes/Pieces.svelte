@@ -73,7 +73,15 @@
 				};
 			});
 
-			if (moves.isStalemate(newPosition, opponent, castleDirection)) {
+
+			if (moves.insufficientMaterial(newPosition)) {
+				status.update((state) => {
+					return {
+						...state,
+						status: statuses.insufficient
+					};
+				});
+			} else if (moves.isStalemate(newPosition, opponent, castleDirection)) {
 				status.update((state) => {
 					return {
 						...state,
