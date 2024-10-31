@@ -10,9 +10,8 @@ import { movePawn } from './move';
 import { movePiece } from './move';
 import { getPieces } from './pieces';
 import { getKingPosition } from './king';
-import { findPieceCoords } from './utils'
-import {areSameColorTiles} from './utils'
-
+import { findPieceCoords } from './utils';
+import { areSameColorTiles } from './utils';
 
 export const moves = {
 	getRegularMoves: function ({ currentPosition, piece, rank, file }) {
@@ -130,36 +129,53 @@ export const moves = {
 		return !isInCheck && moves.length === 0;
 	},
 
-	 insufficientMaterial : function(currentPosition) {
+	insufficientMaterial: function (currentPosition) {
+		const pieces = currentPosition.reduce(
+			(acc, rank) => (acc = [...acc, ...rank.filter((spot) => spot)]),
+			[]
+		);
 
-        const pieces = 
-            currentPosition.reduce((acc,rank) => 
-                acc = [
-                    ...acc,
-                    ...rank.filter(spot => spot)
-                ],[])
+		// King vs. king
+		if (pieces.length === 2) return true;
 
-        // King vs. king
-        if (pieces.length === 2)
-            return true
+		// King and bishop vs. king
+		// King and knight vs. king
+		if (pieces.length === 3 && pieces.some((p) => p.endsWith('b') || p.endsWith('n'))) return true;
 
-        // King and bishop vs. king
-        // King and knight vs. king
-        if (pieces.length === 3 && pieces.some(p => p.endsWith('b') || p.endsWith('n')))
-            return true
+		// King and bishop vs. king and bishop of the same color as the opponent's bishop
+		if (
+			pieces.length === 4 &&
+			pieces.every((p) => p.endsWith('b') || p.endsWith('k')) &&
+			new Set(pieces).size === 4 &&
+			areSameColorTiles(
+				findPieceCoords(currentPosition, 'wb')[0],
+				findPieceCoords(currentPosition, 'bb')[0]
+			)
+		)
+			return true;
 
-        // King and bishop vs. king and bishop of the same color as the opponent's bishop
-        if (pieces.length === 4 && 
-            pieces.every(p => p.endsWith('b') || p.endsWith('k')) &&
-            new Set(pieces).size === 4 &&
-            areSameColorTiles(
-                findPieceCoords(currentPosition,'wb')[0],
-                findPieceCoords(currentPosition,'bb')[0]
-            )
-        )
-            return true
+		return false;
+	},
 
-        return false
-    },
+	isCheckMate: function (currentPosition, player, castleDirection) {
+		const isInCheck = this.isPlayerInCheck({ positionAfterMove: currentPosition, player });
 
+		if (!isInCheck) return false;
+
+		const pieces = getPieces(currentPosition, player);
+		const moves = pieces.reduce(
+			(acc, p) =>
+				(acc = [
+					...acc,
+					...this.getValidMoves({
+						currentPosition,
+						castleDirection,
+						...p
+					})
+				]),
+			[]
+		);
+
+		return isInCheck && moves.length === 0;
+	}
 };

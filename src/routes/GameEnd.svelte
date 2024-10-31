@@ -10,10 +10,13 @@
 
 <div class="popup--inner popup--inner__center">
 	<h1>{isWin ? $status.status : 'Draw'}</h1>
-	<p>{!isWin && $status.status}</p>
+	{#if !isWin}
+		<p>{$status.status}</p>
+	{/if}
 	<div class={$status.status}></div>
 	<button on:click={() => newGame()}>New Game</button>
 </div>
+./lib/assets/br.png
 
 <style>
 	.popup--inner {
@@ -57,5 +60,27 @@
 		padding: 10px 30px;
 		margin: 10px 0;
 		font-size: 1.1em;
+	}
+
+	.wins {
+		height: var(--tile-size);
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	.wins.White {
+		background-image: url('../lib/assets/wk.png');
+	}
+	.wins.Black {
+		background-image: url('../lib/assets/bk.png');
+	}
+	.draws {
+		height: var(--tile-size);
+		background-size: contain;
+		background-repeat: no-repeat, no-repeat;
+		background-position:
+			35% center,
+			65% center;
+		background-image: url('../lib/assets/wk.png'), url('../lib/assets/bk.png');
 	}
 </style>

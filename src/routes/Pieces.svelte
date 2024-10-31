@@ -73,7 +73,6 @@
 				};
 			});
 
-
 			if (moves.insufficientMaterial(newPosition)) {
 				status.update((state) => {
 					return {
@@ -86,6 +85,13 @@
 					return {
 						...state,
 						status: statuses.stalemate
+					};
+				});
+			} else if (moves.isCheckMate(newPosition, opponent, castleDirection)) {
+				status.update((state) => {
+					return {
+						...state,
+						status: statuses.white
 					};
 				});
 			}
