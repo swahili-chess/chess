@@ -98,8 +98,6 @@ export const moves = {
 			[]
 		);
 
-		console.log('log', enemyMoves);
-		console.log('king', kingPos);
 		if (enemyMoves.some(([x, y]) => kingPos[0] === x && kingPos[1] === y)) {
 			return true;
 		} else {

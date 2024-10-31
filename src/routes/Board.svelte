@@ -7,6 +7,7 @@
 	import '../styles.css';
 	import Popup from './Popup.svelte';
 	import { moves } from '../moves/moves';
+	import { getKingPosition } from '../moves/king';
 
 	let ranks = Array(8)
 		.fill()
@@ -15,15 +16,13 @@
 		.fill()
 		.map((x, i) => i + 1);
 
-	const checkTile = (() => {
+	$: checkTile = (() => {
 		const isInCheck = moves.isPlayerInCheck({
 			positionAfterMove: $game.positions[$game.positions.length - 1],
 			player: $game.turn
 		});
 
-		console.log('pd', isInCheck);
-
-		if (isInCheck) return getKingPosition(position, $game.turn);
+		if (isInCheck) return getKingPosition($game.positions[$game.positions.length - 1], $game.turn);
 
 		return null;
 	})();
