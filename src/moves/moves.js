@@ -103,5 +103,27 @@ export const moves = {
 		} else {
 			return false;
 		}
+	},
+
+	isStalemate: function (currentPosition, player, castleDirection) {
+		const isInCheck = this.isPlayerInCheck({ positionAfterMove: currentPosition, player });
+
+		if (isInCheck) return false;
+
+		const pieces = getPieces(currentPosition, player);
+		const moves = pieces.reduce(
+			(acc, p) =>
+				(acc = [
+					...acc,
+					...this.getValidMoves({
+						currentPosition,
+						castleDirection,
+						...p
+					})
+				]),
+			[]
+		);
+
+		return !isInCheck && moves.length === 0;
 	}
 };

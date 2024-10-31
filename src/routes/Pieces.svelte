@@ -33,6 +33,8 @@
 		const y = Math.floor((e.clientX - left) / size);
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
+		const opponent = piece.startsWith('b') ? 'w' : 'b';
+		const castleDirection = $status.castleDirection[`${piece.startsWith('b') ? 'w' : 'b'}`];
 
 		if ($possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
 			if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
@@ -70,9 +72,18 @@
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});
-		}
 
-		possibleMoves.set([]);
+			if (moves.isStalemate(newPosition, opponent, castleDirection)) {
+				status.update((state) => {
+					return {
+						...state,
+						status: statuses.stalemate
+					};
+				});
+			}
+
+			possibleMoves.set([]);
+		}
 	}
 </script>
 
