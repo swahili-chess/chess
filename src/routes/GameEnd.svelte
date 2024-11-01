@@ -1,5 +1,5 @@
 <script>
-	import { status, game, possibleMoves, initPos, initialGame, initialStatus } from '../store/store';
+	import { status, game, possibleMoves, initialGame, initialStatus } from '../store/store';
 	const isWin = $status.status.endsWith('wins');
 	const newGame = () => {
 		game.set(initialGame);

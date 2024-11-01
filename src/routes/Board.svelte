@@ -2,8 +2,7 @@
 	import Files from './Files.svelte';
 	import Pieces from './Pieces.svelte';
 	import Ranks from './Ranks.svelte';
-	import { possibleMoves } from '../store/store';
-	import { game } from '../store/store';
+	import { game, possibleMoves } from '../store/store';
 	import '../styles.css';
 	import Popup from './Popup.svelte';
 	import { moves } from '../moves/moves';

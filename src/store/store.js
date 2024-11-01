@@ -36,6 +36,7 @@ export const statuses = {
 
 export const initialGame = {
 	positions: [initPos],
+	moves: [],
 	turn: 'w'
 };
 

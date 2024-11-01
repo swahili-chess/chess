@@ -3,6 +3,8 @@
 
 	import { status, statuses, game, possibleMoves } from '../store/store';
 
+	import { getNewMoveNotation } from '../moves/notations';
+
 	const options = ['q', 'r', 'b', 'n'];
 
 	$: x = $status.promotionValues.x;
@@ -20,10 +22,19 @@
 		newPosition[$status.promotionValues.rank][$status.promotionValues.file] = '';
 		newPosition[x][y] = color + option;
 		possibleMoves.set([]);
+
+		const newMove = getNewMoveNotation({
+			...$status.promotionValues,
+			position: $game.positions[$game.positions.length - 1],
+			promotesTo: option,
+			piece: $status.promotionValues.x === 7 ? 'wp' : 'bp'
+		});
+
 		game.update((state) => {
 			return {
 				...state,
 				positions: [...state.positions, newPosition],
+				moves: [...state.moves, newMove],
 				turn: state.turn === 'w' ? 'b' : 'w'
 			};
 		});

@@ -1,9 +1,9 @@
 <script>
 	import Piece from './Piece.svelte';
-	import { game } from '../store/store';
-	import { possibleMoves, status, statuses } from '../store/store';
+	import { game, possibleMoves, status, statuses } from '../store/store';
 	import { moves } from '../moves/moves';
 	import { getCastlingDirections } from '../moves/castle';
+	import { getNewMoveNotation } from '../moves/notations';
 
 	let pieces_ref;
 	$: currentPosition = $game.positions[$game.positions.length - 1];
@@ -37,6 +37,7 @@
 		const castleDirection = $status.castleDirection[`${piece.startsWith('b') ? 'w' : 'b'}`];
 
 		if ($possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
+			// This check if the piece is promoting && returns if so
 			if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
 				status.update((state) => {
 					return {
@@ -65,10 +66,21 @@
 				x: x,
 				y: y
 			});
+
+			const newMoveNotation = getNewMoveNotation({
+				piece,
+				rank,
+				file,
+				x,
+				y,
+				position: currentPosition
+			});
+
 			game.update((state) => {
 				return {
 					...state,
 					positions: [...state.positions, newPosition],
+					moves: [...state.moves, newMoveNotation],
 					turn: state.turn === 'w' ? 'b' : 'w'
 				};
 			});
