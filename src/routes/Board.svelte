@@ -26,7 +26,7 @@
 		return null;
 	})();
 
-	const getClassName = (i, j) => {
+	$: getClassName = (i, j) => {
 		let c = 'tile';
 		c += (i + j) % 2 === 0 ? ' tile--dark' : ' tile--light';
 		if ($possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
