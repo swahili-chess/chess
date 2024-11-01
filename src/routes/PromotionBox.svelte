@@ -62,9 +62,7 @@
 		style:left={getLeftStyle(y)}
 	>
 		{#each options as option}
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<div class="piece {color}{option}" on:click={() => clickPiece(option)}></div>
+			<div role="presentation" class="piece {color}{option}" on:click={() => clickPiece(option)}></div>
 		{/each}
 	</div>
 {/if}
