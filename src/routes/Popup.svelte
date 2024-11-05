@@ -1,12 +1,14 @@
 <script>
 	import PromotionBox from './PromotionBox.svelte';
-	import { status, statuses } from '../store/store';
+	import { game, Statuses } from '../store/store';
 	import GameEnd from './GameEnd.svelte';
+
+	$: status = $game.positions[$game.positions.length - 1].status;
 	// svelte-ignore reactive_declaration_non_reactive_property
-	$: isGameOngoing = $status.status === statuses.ongoing || $status.status === statuses.promoting;
+	$: isGameOngoing = status === Statuses.ongoing || status === Statuses.promoting;
 </script>
 
-{#if $status.status === statuses.promoting}
+{#if status === Statuses.promoting}
 	<div class="popup">
 		<PromotionBox />
 	</div>

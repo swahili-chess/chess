@@ -3,8 +3,10 @@
 </script>
 
 <div class="moves-list">
-	{#each $game.moves as move, i}
-		<div data-number={Math.floor(i / 2) + 1}>{move}</div>
+	{#each $game.positions as p, i}
+		{#if p.movesMade}
+			<div data-number={Math.floor(i / 2) + 1}>{p.movesMade}</div>
+		{/if}
 	{/each}
 </div>
 

@@ -25,7 +25,7 @@ initPos[7][5] = 'bb';
 initPos[7][6] = 'bn';
 initPos[7][7] = 'br';
 
-export const statuses = {
+export const Statuses = {
 	ongoing: 'Ongoing',
 	promoting: 'Promoting',
 	white: 'White wins',
@@ -34,28 +34,18 @@ export const statuses = {
 	insufficient: 'Game draws due to insufficient material'
 };
 
-export const initialGame = {
-	positions: [initPos],
-	moves: [],
+export const initGame = {
+	positions: [
+		{
+			board: initPos,
+			movesMade: null,
+			status: Statuses.ongoing,
+			castleDirections: { w: 'both', b: 'both' },
+			promotionValues: { rank: 0, file: 0, x: 0, y: 0 }
+		}
+	],
+	possibleMoves: [],
 	turn: 'w'
 };
 
-export const game = writable(initialGame);
-
-export const possibleMoves = writable([]);
-
-export const initialStatus = {
-	status: statuses.ongoing,
-	promotionValues: {
-		rank: 0,
-		file: 0,
-		x: 0,
-		y: 0
-	},
-	castleDirection: {
-		w: 'both',
-		b: 'both'
-	}
-};
-
-export const status = writable(initialStatus);
+export const game = writable(initGame);

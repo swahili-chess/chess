@@ -1,5 +1,5 @@
 <script>
-	import { game, status, possibleMoves } from '../store/store';
+	import { game } from '../store/store';
 	import { moves } from '../moves/moves';
 	export let rank;
 	export let file;
@@ -14,14 +14,17 @@
 
 		if ($game.turn === piece[0]) {
 			const potentialMoves = moves.getValidMoves({
-				currentPosition: $game.positions[$game.positions.length - 1],
-				previousPosition: $game.positions[$game.positions.length - 2],
-				castleDirection: $status.castleDirection[$game.turn],
+				currentPosition: $game.positions[$game.positions.length - 1].board,
+				previousPosition: $game.positions[$game.positions.length - 2]?.board || undefined,
+				castleDirection: $game.positions[$game.positions.length - 1].castleDirections[$game.turn],
 				piece: piece,
 				rank: rank,
 				file: file
 			});
-			possibleMoves.set(potentialMoves);
+			game.update((g) => ({
+				...g,
+				possibleMoves: potentialMoves
+			}));
 		}
 	}
 

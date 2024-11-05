@@ -1,14 +1,16 @@
 <script>
 	import { copyPosition } from '../moves/utils';
 
-	import { status, statuses, game, possibleMoves } from '../store/store';
+	import { game, Statuses } from '../store/store';
 
 	import { getNewMoveNotation } from '../moves/notations';
 
 	const options = ['q', 'r', 'b', 'n'];
 
-	$: x = $status.promotionValues.x;
-	$: y = $status.promotionValues.y;
+	$: x = $game.positions[$game.positions.length - 1].promotionValues.x;
+	$: y = $game.positions[$game.positions.length - 1].promotionValues.y;
+	$: rank = $game.positions[$game.positions.length - 1].promotionValues.rank;
+	$: file = $game.positions[$game.positions.length - 1].promotionValues.file;
 	$: color = x === 7 ? 'w' : 'b';
 
 	function getLeftStyle(y) {
@@ -18,43 +20,35 @@
 	}
 
 	function clickPiece(option) {
-		const newPosition = copyPosition($game.positions[$game.positions.length - 1]);
-		newPosition[$status.promotionValues.rank][$status.promotionValues.file] = '';
+		const newPosition = copyPosition($game.positions[$game.positions.length - 1].board);
+		newPosition[rank][file] = '';
 		newPosition[x][y] = color + option;
-		possibleMoves.set([]);
-
 		const newMove = getNewMoveNotation({
-			...$status.promotionValues,
-			position: $game.positions[$game.positions.length - 1],
+			...$game.positions[$game.positions.length - 1].promotionValues,
+			position: $game.positions[$game.positions.length - 1].board,
 			promotesTo: option,
-			piece: $status.promotionValues.x === 7 ? 'wp' : 'bp'
+			piece: x === 7 ? 'wp' : 'bp'
 		});
 
-		game.update((state) => {
-			return {
-				...state,
-				positions: [...state.positions, newPosition],
-				moves: [...state.moves, newMove],
-				turn: state.turn === 'w' ? 'b' : 'w'
+		game.update((g) => {
+			const pstn = {
+				board: newPosition,
+				movesMade: newMove,
+				status: Statuses.ongoing,
+				castleDirections: { ...g.positions[g.positions.length - 1].castleDirections },
+				promotionValues: { rank: 0, file: 0, x: 0, y: 0 }
 			};
-		});
-
-		status.update((state) => {
 			return {
-				...state,
-				status: statuses.ongoing,
-				promotionValues: {
-					rank: 0,
-					file: 0,
-					x: 0,
-					y: 0
-				}
+				...g,
+				positions: [...g.positions, pstn],
+				turn: g.turn === 'w' ? 'b' : 'w',
+				possibleMoves: []
 			};
 		});
 	}
 </script>
 
-{#if $status.status === statuses.promoting}
+{#if $game.positions[$game.positions.length - 1].status === Statuses.promoting}
 	<div
 		class="popup--inner promotion-choices"
 		style:top={x === 7 ? '-12.5%' : '97.5%'}
@@ -62,7 +56,11 @@
 		style:left={getLeftStyle(y)}
 	>
 		{#each options as option}
-			<div role="presentation" class="piece {color}{option}" on:click={() => clickPiece(option)}></div>
+			<div
+				role="presentation"
+				class="piece {color}{option}"
+				on:click={() => clickPiece(option)}
+			></div>
 		{/each}
 	</div>
 {/if}

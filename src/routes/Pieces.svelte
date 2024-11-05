@@ -1,32 +1,23 @@
 <script>
 	import Piece from './Piece.svelte';
-	import { game, possibleMoves, status, statuses } from '../store/store';
+	import { game, Statuses } from '../store/store';
 	import { moves } from '../moves/moves';
 	import { getCastlingDirections } from '../moves/castle';
 	import { getNewMoveNotation } from '../moves/notations';
 
 	let pieces_ref;
-	$: currentPosition = $game.positions[$game.positions.length - 1];
+	let updateCastleDirection;
+	$: currentPosition = $game.positions[$game.positions.length - 1].board;
 
 	const updateCastlingState = ({ piece, file, rank }) => {
 		const direction = getCastlingDirections({
-			castleDirection: $status.castleDirection,
+			castleDirection: $game.positions[$game.positions.length - 1].castleDirections,
 			piece,
 			file,
 			rank
 		});
-		if (direction) {
-			status.update((s) => {
-				return {
-					...s,
-					castleDirection: {
-						...s.castleDirection,
-						[piece[0]]: direction
-					}
-				};
-			});
-		}
 	};
+
 	function drop(e) {
 		const { left, width, top } = pieces_ref.getBoundingClientRect();
 		const size = width / 8;
@@ -34,28 +25,36 @@
 		const x = 7 - Math.floor((e.clientY - top) / size);
 		const [piece, rank, file] = e.dataTransfer.getData('text/plain').split(',');
 		const opponent = piece.startsWith('b') ? 'w' : 'b';
-		const castleDirection = $status.castleDirection[`${piece.startsWith('b') ? 'w' : 'b'}`];
+		const opponentcastleDirection =
+			$game.positions[$game.positions.length - 1].castleDirections[
+				`${piece.startsWith('b') ? 'w' : 'b'}`
+			];
 
-		if ($possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
+		if ($game.possibleMoves?.find((m) => m[0] === x && m[1] === y)) {
 			// This check if the piece is promoting && returns if so
 			if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
-				status.update((state) => {
+				game.update((g) => {
+					const postn = [...g.positions];
+					postn[postn.length - 1].promotionValues = {
+						rank: Number(rank),
+						file: Number(file),
+						x: x,
+						y: y
+					};
+
+					postn[postn.length - 1].status = Statuses.promoting;
+
 					return {
-						...state,
-						status: statuses.promoting,
-						promotionValues: {
-							rank: Number(rank),
-							file: Number(file),
-							x: x,
-							y: y
-						}
+						...g,
+						positions: postn
 					};
 				});
+
 				return;
 			}
 
 			if (piece.endsWith('r') || piece.endsWith('k')) {
-				updateCastlingState({ piece, file, rank });
+				updateCastleDirection = updateCastlingState({ piece, file, rank });
 			}
 
 			const newPosition = moves.performMove({
@@ -76,39 +75,48 @@
 				position: currentPosition
 			});
 
-			game.update((state) => {
+			game.update((g) => {
+				const lastPosition = g.positions[g.positions.length - 1];
+				const updatedCastleDirections = updateCastleDirection
+					? { ...lastPosition.castleDirections, [piece[0]]: direction }
+					: { ...lastPosition.castleDirections };
+
+				const pstn = {
+					board: newPosition,
+					movesMade: newMoveNotation,
+					status: g.positions[g.positions.length - 1].status,
+					castleDirections: updatedCastleDirections,
+					promotionValues: { rank: 0, file: 0, x: 0, y: 0 }
+				};
 				return {
-					...state,
-					positions: [...state.positions, newPosition],
-					moves: [...state.moves, newMoveNotation],
-					turn: state.turn === 'w' ? 'b' : 'w'
+					...g,
+					positions: [...g.positions, pstn],
+					turn: g.turn === 'w' ? 'b' : 'w',
+					possibleMoves: []
 				};
 			});
 
 			if (moves.insufficientMaterial(newPosition)) {
-				status.update((state) => {
-					return {
-						...state,
-						status: statuses.insufficient
-					};
+				game.update((g) => {
+					const u = { ...g };
+					u.positions[u.positions.length - 1].status = Statuses.insufficient;
+					return u;
 				});
-			} else if (moves.isStalemate(newPosition, opponent, castleDirection)) {
-				status.update((state) => {
-					return {
-						...state,
-						status: statuses.stalemate
-					};
+			} else if (moves.isStalemate(newPosition, opponent, opponentcastleDirection)) {
+				game.update((g) => {
+					const u = { ...g };
+					u.positions[u.positions.length - 1].status = Statuses.stalemate;
+					return u;
 				});
-			} else if (moves.isCheckMate(newPosition, opponent, castleDirection)) {
-				status.update((state) => {
-					return {
-						...state,
-						status: statuses.white
-					};
+			} else if (moves.isCheckMate(newPosition, opponent, opponentcastleDirection)) {
+				game.update((g) => {
+					const u = { ...g };
+					u.positions[u.positions.length - 1].status = piece.startsWith('w')
+						? Statuses.white
+						: Statuses.black;
+					return u;
 				});
 			}
-
-			possibleMoves.set([]);
 		}
 	}
 </script>

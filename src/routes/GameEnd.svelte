@@ -1,22 +1,21 @@
 <script>
-	import { status, game, possibleMoves, initialGame, initialStatus } from '../store/store';
-	const isWin = $status.status.endsWith('wins');
+	import { game, initGame } from '../store/store';
 	const newGame = () => {
-		game.set(initialGame);
-		status.set(initialStatus);
-		possibleMoves.set([]);
+		game.set(initGame);
 	};
+
+	$: status = $game.positions[$game.positions.length - 1].status;
+	$: iswin = status.endsWith('wins');
 </script>
 
 <div class="popup--inner popup--inner__center">
-	<h1>{isWin ? $status.status : 'Draw'}</h1>
-	{#if !isWin}
-		<p>{$status.status}</p>
+	<h1>{iswin ? status : 'Draw'}</h1>
+	{#if !iswin}
+		<p>{status}</p>
 	{/if}
-	<div class={$status.status}></div>
+	<div class={status}></div>
 	<button on:click={() => newGame()}>New Game</button>
 </div>
-./lib/assets/br.png
 
 <style>
 	.popup--inner {

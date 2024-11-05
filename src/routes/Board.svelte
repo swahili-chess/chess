@@ -2,7 +2,7 @@
 	import Files from './Files.svelte';
 	import Pieces from './Pieces.svelte';
 	import Ranks from './Ranks.svelte';
-	import { game, possibleMoves } from '../store/store';
+	import { game } from '../store/store';
 	import '../styles.css';
 	import Popup from './Popup.svelte';
 	import { moves } from '../moves/moves';
@@ -17,11 +17,12 @@
 
 	$: checkTile = (() => {
 		const isInCheck = moves.isPlayerInCheck({
-			positionAfterMove: $game.positions[$game.positions.length - 1],
+			positionAfterMove: $game.positions[$game.positions.length - 1].board,
 			player: $game.turn
 		});
 
-		if (isInCheck) return getKingPosition($game.positions[$game.positions.length - 1], $game.turn);
+		if (isInCheck)
+			return getKingPosition($game.positions[$game.positions.length - 1].board, $game.turn);
 
 		return null;
 	})();
@@ -29,8 +30,8 @@
 	$: getClassName = (i, j) => {
 		let c = 'tile';
 		c += (i + j) % 2 === 0 ? ' tile--dark' : ' tile--light';
-		if ($possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
-			if ($game.positions[$game.positions.length - 1][i][j]) c += ' attacking';
+		if ($game.possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
+			if ($game.positions[$game.positions.length - 1].board[i][j]) c += ' attacking';
 			else c += ' highlight';
 		}
 
