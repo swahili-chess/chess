@@ -14,10 +14,17 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-            source ~/.bashrc
+            
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
             cd /var/www/${{ secrets.USERNAME }}/chess
+
             git pull 
+
+            npm ci 
             npm run build
+            
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl stop chess.service 
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl start chess.service 
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl reload nginx
