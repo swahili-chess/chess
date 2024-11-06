@@ -118,6 +118,13 @@
 				});
 			}
 		}
+
+		game.update((g) => {
+			return {
+				...g,
+				possibleMoves : []
+			}
+		})
 	}
 </script>
 
