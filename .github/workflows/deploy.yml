@@ -1,0 +1,22 @@
+name: build and deploy chess app
+on: [push]
+jobs:
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+            cd /var/www/${{ secrets.USERNAME }}/chess
+            git pull 
+            npm run build
+            echo ${{ secrets.PASSWORD }} | sudo -S systemctl stop chess.service 
+            echo ${{ secrets.PASSWORD }} | sudo -S systemctl start chess.service 
+            echo ${{ secrets.PASSWORD }} | sudo -S systemctl reload nginx
