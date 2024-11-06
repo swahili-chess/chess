@@ -6,7 +6,7 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+    - name: executing remote ssh commands 
       uses: appleboy/ssh-action@v1.1.0
       with:
         host: ${{ secrets.HOST }}
@@ -24,7 +24,7 @@ jobs:
 
             npm ci 
             npm run build
-            
+
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl stop chess.service 
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl start chess.service 
             echo ${{ secrets.PASSWORD }} | sudo -S systemctl reload nginx
