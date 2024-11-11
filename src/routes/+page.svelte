@@ -18,4 +18,14 @@
 		font-family: 'Sofia Sans', sans-serif;
 		grid-template-columns: auto 220px;
 	}
+
+	@media all and (max-width: 1000px) {
+	.page {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		padding: 2rem;
+	}
+}
+
 </style>

@@ -324,6 +324,25 @@ body {
 .piece.p-70 {
 	transform: translate(700%, 700%);
 }
+
+@media all and (max-width: 859px) {
+	:root {
+		--tile-size: 80px;
+	}
+}
+
+@media all and (max-width: 689px) {
+	:root {
+		--tile-size: 70px;
+	}
+}
+
+@media all and (max-width: 618px) {
+	:root {
+		--tile-size: 60px;
+	}
+}
+
 @media all and (max-width: 450px) {
 	:root {
 		--tile-size: 50px;
