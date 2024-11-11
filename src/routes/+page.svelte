@@ -18,7 +18,6 @@
 		font-family: 'Sofia Sans', sans-serif;
 		grid-template-columns: auto 220px;
 	}
-<<<<<<< HEAD
 
 	@media all and (max-width: 1000px) {
 	.page {
@@ -29,6 +28,4 @@
 	}
 }
 
-=======
->>>>>>> origin/main
 </style>
