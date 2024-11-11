@@ -324,6 +324,7 @@ body {
 .piece.p-70 {
 	transform: translate(700%, 700%);
 }
+<<<<<<< HEAD
 @media all and (max-width: 859px) {
 	:root {
 		--tile-size: 80px;
@@ -343,6 +344,9 @@ body {
 }
 
 @media all and (max-width: 545px) {
+=======
+@media all and (max-width: 450px) {
+>>>>>>> origin/main
 	:root {
 		--tile-size: 50px;
 	}
