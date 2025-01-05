@@ -15,7 +15,7 @@
 		.fill()
 		.map((x, i) => i + 1);
 
-	$: checkTile = (() => {
+	let checkTile = $derived((() => {
 		const isInCheck = moves.isPlayerInCheck({
 			positionAfterMove: $game.positions[$game.positions.length - 1].board,
 			player: $game.turn
@@ -25,9 +25,9 @@
 			return getKingPosition($game.positions[$game.positions.length - 1].board, $game.turn);
 
 		return null;
-	})();
+	})());
 
-	$: getClassName = (i, j) => {
+	let getClassName = $derived((i, j) => {
 		let c = 'tile';
 		c += (i + j) % 2 === 0 ? ' tile--dark' : ' tile--light';
 		if ($game.possibleMoves?.find((m) => m[0] === i && m[1] === j)) {
@@ -40,7 +40,7 @@
 		}
 
 		return c;
-	};
+	});
 </script>
 
 <div class="board">

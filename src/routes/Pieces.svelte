@@ -5,9 +5,9 @@
 	import { getCastlingDirections } from '../moves/castle';
 	import { getNewMoveNotation } from '../moves/notations';
 
-	let pieces_ref;
+	let pieces_ref = $state();
 	let updateCastleDirection;
-	$: currentPosition = $game.positions[$game.positions.length - 1].board;
+	let currentPosition = $derived($game.positions[$game.positions.length - 1].board);
 
 	const updateCastlingState = ({ piece, file, rank }) => {
 		const direction = getCastlingDirections({
@@ -128,11 +128,11 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	bind:this={pieces_ref}
-	on:drop={(event) => drop(event)}
-	on:dragover={(ev) => {
+	ondrop={(event) => drop(event)}
+	ondragover={(ev) => {
 		ev.preventDefault();
 	}}
 	class="pieces"

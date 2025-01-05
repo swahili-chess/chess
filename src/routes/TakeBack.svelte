@@ -16,7 +16,7 @@
 </script>
 
 <div>
-	<button on:click={() => takeBack()}>Take Back</button>
+	<button onclick={() => takeBack()}>Take Back</button>
 </div>
 
 <style>

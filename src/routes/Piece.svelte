@@ -1,9 +1,7 @@
 <script>
 	import { game } from '../store/store';
 	import { moves } from '../moves/moves';
-	export let rank;
-	export let file;
-	export let piece;
+	let { rank, file, piece } = $props();
 
 	function dragstart(e) {
 		e.dataTransfer.effectAllowed = 'move';
@@ -33,10 +31,10 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	draggable={true}
-	on:dragstart={dragstart}
-	on:dragend={dragend}
+	ondragstart={dragstart}
+	ondragend={dragend}
 	class="piece {piece} p-{file}{rank}"
 ></div>

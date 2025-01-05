@@ -4,8 +4,8 @@
 		game.set(initGame);
 	};
 
-	$: status = $game.positions[$game.positions.length - 1].status;
-	$: iswin = status.endsWith('wins');
+	let status = $derived($game.positions[$game.positions.length - 1].status);
+	let iswin = $derived(status.endsWith('wins'));
 </script>
 
 <div class="popup--inner popup--inner__center">
@@ -14,7 +14,7 @@
 		<p>{status}</p>
 	{/if}
 	<div class={status}></div>
-	<button on:click={() => newGame()}>New Game</button>
+	<button onclick={() => newGame()}>New Game</button>
 </div>
 
 <style>

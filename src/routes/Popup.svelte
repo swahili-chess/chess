@@ -3,9 +3,9 @@
 	import { game, Statuses } from '../store/store';
 	import GameEnd from './GameEnd.svelte';
 
-	$: status = $game.positions[$game.positions.length - 1].status;
+	let status = $derived($game.positions[$game.positions.length - 1].status);
 	// svelte-ignore reactive_declaration_non_reactive_property
-	$: isGameOngoing = status === Statuses.ongoing || status === Statuses.promoting;
+	let isGameOngoing = $derived(status === Statuses.ongoing || status === Statuses.promoting);
 </script>
 
 {#if status === Statuses.promoting}

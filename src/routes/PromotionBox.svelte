@@ -7,11 +7,11 @@
 
 	const options = ['q', 'r', 'b', 'n'];
 
-	$: x = $game.positions[$game.positions.length - 1].promotionValues.x;
-	$: y = $game.positions[$game.positions.length - 1].promotionValues.y;
-	$: rank = $game.positions[$game.positions.length - 1].promotionValues.rank;
-	$: file = $game.positions[$game.positions.length - 1].promotionValues.file;
-	$: color = x === 7 ? 'w' : 'b';
+	let x = $derived($game.positions[$game.positions.length - 1].promotionValues.x);
+	let y = $derived($game.positions[$game.positions.length - 1].promotionValues.y);
+	let rank = $derived($game.positions[$game.positions.length - 1].promotionValues.rank);
+	let file = $derived($game.positions[$game.positions.length - 1].promotionValues.file);
+	let color = $derived(x === 7 ? 'w' : 'b');
 
 	function getLeftStyle(y) {
 		if (y <= 1) return '0%';
@@ -59,7 +59,7 @@
 			<div
 				role="presentation"
 				class="piece {color}{option}"
-				on:click={() => clickPiece(option)}
+				onclick={() => clickPiece(option)}
 			></div>
 		{/each}
 	</div>
@@ -87,16 +87,16 @@
 		box-shadow: 0 0 0 5px var(--dark-tile) inset;
 		transform: scale(1.05);
 	}
-	.promotion-choices :is(.wq, .bq) {
+	.promotion-choices :is(:global(.wq, .bq)) {
 		left: 0;
 	}
-	.promotion-choices :is(.wr, .br) {
+	.promotion-choices :is(:global(.wr, .br)) {
 		left: 25%;
 	}
-	.promotion-choices :is(.wb, .bb) {
+	.promotion-choices :is(:global(.wb, .bb)) {
 		left: 50%;
 	}
-	.promotion-choices :is(.wn, .bn) {
+	.promotion-choices :is(:global(.wn, .bn)) {
 		left: 75%;
 	}
 </style>
